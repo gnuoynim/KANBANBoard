@@ -14,7 +14,7 @@
         </li>
       </ul>
     </div>
-    <PostCreate @create="createPost"/>
+    <PostCreate />
   </div>
 </template>
 
