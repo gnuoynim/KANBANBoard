@@ -15,18 +15,20 @@
       </ul>
     </div>
     <PostCreate />
+    <h2> counter{{ store.counter }}</h2>
+    <h2> counter{{ store.doubleCount }}</h2>
+    <button @click="store.increment()">store버튼</button>
   </div>
 </template>
 
 <script setup>
 import {  reactive,ref } from 'vue'
 import PostCreate from './components/PostCreate.vue'
-
+import { useCounterStore } from './store/counter';
 
 const todos = reactive([]);
 const addTodo = event => {
 	todos.push(event.target.value);
-
 	console.log(`저장되었습니다. ${todos}`);
 };
 
@@ -34,6 +36,7 @@ const createPost =()=>{
   console.log("rr")
 }
 
+const store = useCounterStore()
 </script>
 
 <style lang="scss" scoped>

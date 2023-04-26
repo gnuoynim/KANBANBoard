@@ -14,12 +14,9 @@
 <script setup>
 import {ref} from 'vue'
 
-const props = defineProps();
-defineEmits()
-const type = ref('')
-const typeSelect = () =>{
-  type : type.value
-}
+
+const type = ref('option1')
+
 console.log(type.value)
 </script>
 
