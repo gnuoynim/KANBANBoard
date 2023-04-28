@@ -2,8 +2,14 @@
   <div class="modal">
     <div class="modalContainer">
       <button type="button">close</button>
-      <p v-for="item in modal" :key="item" class="title">{{ item }}</p>
-      <button>일정추가</button>
+      <p v-for="item in modal" :key="item" class="title">{{ item.listIndex }}</p>
+      <button type="button">일정추가</button>
+      <div class="addList">
+        <input type="text" />
+        <ul>
+          <li>{{ listIndex }}</li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
@@ -13,10 +19,13 @@
 
 const props = defineProps({
   modal: {
-    Type: String,
+    Type: Boolean,
     default: '',
   },
 })
+
+
+
 </script>
 
 <style lang="scss" scoped>

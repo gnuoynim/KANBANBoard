@@ -1,9 +1,10 @@
 import { defineStore } from "pinia";
 
 export const useDetailStore = defineStore('detailStore',{
-  state : () =>({
-    detailList:[],
-  }),
+  state : () =>([
+    {detailList : ""},
+    {detailOption : ""},
+  ]),
   getters:{
 
   },
