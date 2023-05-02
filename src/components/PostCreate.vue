@@ -9,6 +9,7 @@
       </select>
     </div>
   </div>
+ 
 </template>
 
 <script setup>
@@ -16,8 +17,8 @@ import {ref} from 'vue'
 
 
 const type = ref('option1')
+const step = ref(0)
 
-console.log(type.value)
 </script>
 
 <style lang="scss" scoped></style>

@@ -1,29 +1,60 @@
 <template>
-  <div class="modal">
+  <div class="modal" v-if="modal == true">
     <div class="modalContainer">
-      <button type="button">close</button>
-      <p v-for="item in modal" :key="item" class="title">{{ item.listIndex }}</p>
-      <button type="button">일정추가</button>
       <div class="addList">
-        <input type="text" />
         <ul>
-          <li>{{ listIndex }}</li>
+          <li>
+            <p>현재일정 : {{ todoStore.todoList[push] }}</p>
+          </li>
         </ul>
       </div>
+      <input type="text" @keyup.enter="addDetail" />
+      <div class="selectBox">
+        일정을 선택하세요: {{ selected }}
+        <select v-model="selected">
+          <option>option1</option>
+          <option>option2</option>
+          <option>option3</option>
+        </select>
+      </div>
+      <div>
+        <ul>
+          <li v-for=" (detail, index) in detailTodo.detailList" :key="index">
+            {{ detail }}
+        
+            selected:{{ selected }}
+          </li>
+        </ul>
+      </div>
+  
+      <button type="button" @click="$emit('closeModal')">close</button>
+      <button type="button" @click="$emit('closeModal'); $emit('selected',selected)">일정추가 완료</button>
+  
     </div>
   </div>
 </template>
 
+
 <script setup>
+
+import { ref } from 'vue'
+import { useDetailStore } from '../store/detailTodo.js'
+import { useTodoStore } from '../store/todo';
+
+const selected = ref('option1');
+const detailTodo = useDetailStore();
+const todoStore = useTodoStore();
+const addDetail = event => {
+  detailTodo.detailList.push(event.target.value);
+  detailTodo.todoOption.push(selected)
+}
 
 
 const props = defineProps({
-  modal: {
-    Type: Boolean,
-    default: '',
-  },
+  modal: Boolean,
+  push: Number,
+  todoStore: Object
 })
-
 
 
 </script>
