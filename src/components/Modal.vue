@@ -23,6 +23,7 @@
       </div>
       <button type="button" @click="$emit('closeModal'); $emit('selected', selected); detailTodo.detailList = []" class="addButton">일정추가 완료</button>
     </div>
+   
   </div>
 </template>
 

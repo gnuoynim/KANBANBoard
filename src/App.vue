@@ -49,24 +49,11 @@ const todoStore = useTodoStore();
 const modal = ref(false); //모달창
 const push = ref(0); // 클릭한값
 const detailTodo = useDetailStore();
-const state = reactive({
-  newTodo: '',
-  todos: []
-})
 
 
 const addTodo = event => {
   todoStore.todoList.push(event.target.value);
-  if (state.newTodo.trim()) {
-    state.todos.push({
-      id: Date.now(),
-      name: state.newTodo,
-      time: 0,
-      start: '',
-      end: ''
-    })
-    state.newTodo = '';
-  }
+
   event.target.value = '';
 };
 const deleteTodo = index => {
