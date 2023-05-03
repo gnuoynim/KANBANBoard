@@ -32,7 +32,7 @@ import { ref } from 'vue'
 import { useDetailStore } from '../store/detailTodo.js'
 import { useTodoStore } from '../store/todo';
 
-const selected = ref('option1');
+const selected = ref('doing');
 const detailTodo = useDetailStore();
 const todoStore = useTodoStore();
 
@@ -40,9 +40,9 @@ const addDetail = event => {
 
   detailTodo.detailList.push(event.target.value);
 
-  if (selected.value == 'option1') {
+  if (selected.value == 'doing') {
     detailTodo.boards.push(event.target.value);
-  } else if (selected.value == 'option2') {
+  } else if (selected.value == 'done') {
     detailTodo.boardSelect.push(event.target.value);
   }
   event.target.value = '';

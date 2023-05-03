@@ -6,8 +6,8 @@ export const useDetailStore = defineStore('detailStore', {
     boards: [],
     boardSelect: [],
     todoOption: [
-      { option1: '' },
-      { option2: '' }
+      { doing: '' },
+      { done: '' }
     ],
     selectedBoard: 0,
 
