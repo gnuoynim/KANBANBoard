@@ -2,7 +2,8 @@
   <div class="modal" v-if="modal == true">
     <div class="modalContainer">
       <div class="addList">
-        <p>현재일정 : {{ todoStore.todoList[push] }}</p>
+        <button type="button" @click="$emit('closeModal')" class="closeButton">X</button>
+        <p class="title">현재일정 : {{ todoStore.todoList[push] }}</p>
         <div class="selectBox">
           일정을 선택하세요: {{ selected }}
           <select v-model="selected" @change="setSelected">
@@ -11,7 +12,7 @@
             </option>
           </select>
         </div>
-        <input type="text" @keyup.enter="addDetail" placeholder="일정을 자세하게 작성해보세요"/>
+        <input type="text" @keyup.enter="addDetail" placeholder="일정을 자세하게 작성해보세요" />
       </div>
       <div>
         <ul>
@@ -20,9 +21,7 @@
           </li>
         </ul>
       </div>
-      {{ detailTodo }}
-      <button type="button" @click="$emit('closeModal')">close</button>
-      <button type="button" @click="$emit('closeModal'); $emit('selected', selected); detailTodo.detailList = []">일정추가 완료</button>
+      <button type="button" @click="$emit('closeModal'); $emit('selected', selected); detailTodo.detailList = []" class="addButton">일정추가 완료</button>
     </div>
   </div>
 </template>
@@ -38,8 +37,9 @@ const detailTodo = useDetailStore();
 const todoStore = useTodoStore();
 
 const addDetail = event => {
+
   detailTodo.detailList.push(event.target.value);
- 
+
   if (selected.value == 'option1') {
     detailTodo.boards.push(event.target.value);
   } else if (selected.value == 'option2') {
@@ -47,8 +47,6 @@ const addDetail = event => {
   }
   event.target.value = '';
 }
-
-
 
 const setSelected = event => {
   detailTodo.setSelected(event.target.value);
@@ -77,18 +75,43 @@ const props = defineProps({
     top: 50%;
     transform: translate3d(-50%, -50%, 0);
     width: 500px;
-    height: 600px;
+    height: 440px;
     background-color: #fff;
+    border-radius: 20px;
 
     .title {
       text-align: center;
       font-size: 20px;
+
     }
   }
 }
-.addList{
-  input{
+
+.closeButton {
+  float: right;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.addButton {
+  width: 50%;
+  line-height: 30px;
+  background-color: #266dff;
+  border: 0;
+  border-radius: 5px;
+  color: #fff;
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  cursor: pointer;
+}
+
+.addList {
+  input {
     width: 80%;
   }
-}
-</style>
+}</style>

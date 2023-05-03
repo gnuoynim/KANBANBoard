@@ -4,7 +4,7 @@ export const useTodoStore = defineStore('todoStore', {
   state: () => ({
     todoList: [],
     todoOption: '',
-    totalTime: ref(0),
+
   }),
   getters: {
 

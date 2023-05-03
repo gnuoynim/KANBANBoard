@@ -11,8 +11,8 @@
         <Time />
       </div>
       <ul>
-        <li v-for="(list, index) in  todoStore.todoList  " :key="list">
-          <input type="checkBox" />todo : {{ list }}
+        <li v-for="(list, index) in   todoStore.todoList   " :key="list">
+          <input type="checkBox" /><span>{{ list }}</span> 
           <button type="button" @click="push = index; modal = true">자세한 일정추가{{ modal }}</button>
           <button type="button">일정삭제</button>
         </li>
@@ -23,7 +23,7 @@
     <div class="items">
       <h2>해야할일중 남은일 : 갯수{{ detailTodo.boards.length }}</h2>
       <ul>
-        <li v-for="(   item, i   ) in   detailTodo.boards " :key=" i ">
+        <li v-for="( item, i ) in detailTodo.boards  " :key=" i ">
           <input type="checkbox">{{ item }}
         </li>
       </ul>
@@ -31,7 +31,7 @@
     <div class="itemsYellow">
       <h2>해야할일중 끝낸일 : 갯수{{ detailTodo.boardSelect.length }}</h2>
       <ul>
-        <li v-for="(  item, i  ) in   detailTodo.boardSelect   ">
+        <li v-for="(   item, i   ) in    detailTodo.boardSelect    ">
           <input type="checkbox">{{ item }}
         </li>
       </ul>
@@ -97,6 +97,13 @@ const addTodo = event => {
         background-color: #fff;
         padding: 20px;
         margin: 30px;
+        &:hover{
+          background-color: #e9c7f7;
+        }
+        input[type="checkbox"]:checked + span{
+          background-color: #0083ff;
+        }
+
       }
     }
   }
@@ -127,6 +134,7 @@ const addTodo = event => {
   li {
     list-style: none;
     background-color: #fff;
+
   }
 }
 
@@ -135,6 +143,7 @@ const addTodo = event => {
   background-color: #e4e0f5;
   display: flex;
   align-items: center;
+
   input {
     height: 100%;
   }
