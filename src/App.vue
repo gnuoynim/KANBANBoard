@@ -31,6 +31,7 @@
       <ul>
         <li v-for="( item, i ) in detailTodo.boards " :key=" i ">
           <input type="checkbox">{{ item.text }}
+          <button @click="moveItem(item, 'boards', 'boardSelect')">완료</button>
         </li>
       </ul>
     </div>
@@ -39,6 +40,7 @@
       <ul>
         <li v-for="( item, i ) in  detailTodo.boardSelect ">
           <input type="checkbox">{{ item.text }}
+          <button @click="moveItem(item, 'boardSelect', 'boards')">미완료</button>
         </li>
       </ul>
     </div>
@@ -95,6 +97,14 @@ const totalTime = computed(() => {
 
   return `${totalHours}시간 ${totalMinutes}분`;
 });
+
+const moveItem = (item, fromList, toList) => {
+    const fromIndex = detailTodo[fromList].indexOf(item);
+    if (fromIndex > -1) {
+      detailTodo[fromList].splice(fromIndex, 1);
+      detailTodo[toList].push(item);
+    }
+  };
 </script>
 
 <style lang="scss" scoped>
