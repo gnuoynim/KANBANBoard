@@ -1,45 +1,57 @@
 <template>
   <div>
-    <div class="container">
-      <div class="form-group">
+    <div class="timeTable">
+      <p>일정 예상 걸리는 시간</p>
+      <div>
         <label>시작 시간:</label>
         <input type="time" v-model="start">
-        {{ start }}
       </div>
-      <div class="form-group">
+      <div>
         <label>종료 시간:</label>
-        <input type="time" v-model="end">{{ end }}
+        <input type="time" v-model="end" @change="calculate">
       </div>
-      <div class="form-group">
-        <button @click="calculate">계산하기</button>
-      </div>
-      <div class="form-group">
-        <label>총 시간:</label>
+      <div>
+        <label>예상시간:</label>
         <span>{{ total }}</span>
       </div>
     </div>
   </div>
+  {{ time }}
 </template>
 
 <script setup>
 
 import moment from 'moment';
 import { ref } from 'vue'
+import { useTodoStore } from '../store/todo';
 
+const todoStore = useTodoStore();
 let start = ref('');
 let end = ref('');
 let total = ref('');
+let time = ref(0)
 
-const calculate = () => {
+const calculate = (event) => {
   const startTime = moment(start.value, 'HH:mm');
   const endTime = moment(end.value, 'HH:mm');
   const duration = moment.duration(endTime.diff(startTime));
   const hours = duration.hours();
   const minutes = duration.minutes();
   total.value = `${hours}시간 ${minutes}분`;
+
 }
 
 
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.timeTable {
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+  background-color: #fff;
+  padding: 10px;
+  border-radius: 10px;
+  border: 2px solid #5400ff;
+}
+</style>

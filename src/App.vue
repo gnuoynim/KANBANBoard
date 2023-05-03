@@ -4,104 +4,81 @@
   </div>
   <div class="todo">
     <div class="todoList">
-      <h2>TodoList</h2>
+      <h2>TodoList (오늘 해야할일 목록)</h2>
       <p>일정갯수{{ todoStore.todoList.length }}</p>
       <div class="inputBox">
         todo : <input type="text" placeholder="오늘 할일은 무엇입니까?" @keyup.enter="addTodo" />
-        <div>
-          <Time/>
-          <form>
-            <label for="estimatedTime">예상시간:</label>
-            <input id="estimatedTime" type="time" name="estimatedTime">
-          </form>
-        </div>
+        <Time />
       </div>
       <ul>
-        <li v-for="(list, index) in  todoStore.todoList " :key="list">
-          <input type="checkBox" />todo : {{ list }},{{ index }}
+        <li v-for="(list, index) in  todoStore.todoList  " :key="list">
+          <input type="checkBox" />todo : {{ list }}
           <button type="button" @click="push = index; modal = true">자세한 일정추가{{ modal }}</button>
-          <button>일정삭제</button>
-          <ul>
-            <li v-for=" (detail, index) in detailTodo.detailList" :key="index">
-            {{ detail }}
-          </li>
-          </ul>
+          <button type="button">일정삭제</button>
         </li>
       </ul>
-      todoStore: {{ todoStore }}   {{ detailTodo }}
-      <Modal :modal=" modal " :push=" push " :todoStore=" todoStore " @closeModal="modal=false,  selected" />
+      todoStore: {{ todoStore }} {{ detailTodo }}
+      <Modal :modal=" modal " :push=" push " :todoStore=" todoStore " @closeModal=" modal = false, selected " />
     </div>
-    <Test/>
-    <div v-for="(item, i) in detailTodo.todoOption">
-      {{ item }}
+    <div class="items">
+      <h2>해야할일중 남은일 : 갯수{{ detailTodo.boards.length }}</h2>
+      <ul>
+        <li v-for="(   item, i   ) in   detailTodo.boards " :key=" i ">
+          <input type="checkbox">{{ item }}
+        </li>
+      </ul>
     </div>
-
-    <PostCreate />
+    <div class="itemsYellow">
+      <h2>해야할일중 끝낸일 : 갯수{{ detailTodo.boardSelect.length }}</h2>
+      <ul>
+        <li v-for="(  item, i  ) in   detailTodo.boardSelect   ">
+          <input type="checkbox">{{ item }}
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, computed, watch } from 'vue'
+import { ref, reactive } from 'vue'
 import { useTodoStore } from './store/todo.js'
 import Modal from './components/Modal.vue'
-import PostCreate from './components/PostCreate.vue'
 import { useDetailStore } from './store/detailTodo.js'
 import Time from './components/Time.vue'
-import Test from './components/Test.vue'
 
 const todoStore = useTodoStore();
 const modal = ref(false); //모달창
 const push = ref(0); // 클릭한값
-const todos = ref([]);
-const name = ref('');
-const input_content = ref('');
-const input_category = ref(null);
 const detailTodo = useDetailStore();
+const state = reactive({
+  newTodo: '',
+  todos: []
+})
 
 
 const addTodo = event => {
   todoStore.todoList.push(event.target.value);
+  if (state.newTodo.trim()) {
+    state.todos.push({
+      id: Date.now(),
+      name: state.newTodo,
+      time: 0,
+      start: '',
+      end: ''
+    })
+    state.newTodo = '';
+  }
+  event.target.value = '';
 };
-
-
-// const todos_asc = computed(() => todos.value.sort((a, b) => {
-//   return b.createdAt - a.createdAt
-// }))
-// watch(name, (newVal) => {
-//   localStorage.setItem('name', newVal)
-// })
-// watch(todos, (newVal) => {
-//   localStorage.setItem('todos', JSON.stringify(newVal))
-// }, {
-//   deep: true
-// })
-// const addTodos = () => {
-//   if (input_content.value.trim() === '' || input_category.value === null) {
-//     return
-//   }
-//   todos.value.push({
-//     content: input_content.value,
-//     category: input_category.value,
-//     done: false,
-//     editable: false,
-//     createdAt: new Date().getTime()
-//   })
-// }
-// const removeTodo = (todo) => {
-//   todos.value = todos.value.filter((t) => t !== todo)
-// }
-// onMounted(() => {
-//   name.value = localStorage.getItem('name') || ''
-//   todos.value = JSON.parse(localStorage.getItem('todos')) || []
-// })
 
 </script>
 
 <style lang="scss" scoped>
 .todo {
+  width: 100%;
   display: grid;
   grid-template-columns: 30% 30% 30%;
-  gap: 10%;
+  gap: 5%;
 
   .todoList {
     background-color: red;
@@ -125,7 +102,41 @@ const addTodo = event => {
   }
 }
 
+.items {
+  background-color: #0083ff;
+
+  ul {
+    margin: 20px;
+    padding: 0;
+  }
+
+  li {
+    list-style: none;
+    background-color: #fff;
+  }
+}
+
+.itemsYellow {
+  background-color: #ffab00;
+
+  ul {
+    margin: 20px;
+    padding: 0;
+  }
+
+  li {
+    list-style: none;
+    background-color: #fff;
+  }
+}
+
 .inputBox {
-  background-color: antiquewhite;
+  padding: 20px;
+  background-color: #e4e0f5;
+  display: flex;
+  align-items: center;
+  input {
+    height: 100%;
+  }
 }
 </style>

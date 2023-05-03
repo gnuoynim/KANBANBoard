@@ -2,38 +2,30 @@
   <div class="modal" v-if="modal == true">
     <div class="modalContainer">
       <div class="addList">
-        <ul>
-          <li>
-            <p>현재일정 : {{ todoStore.todoList[push] }}</p>
-          </li>
-        </ul>
-      </div>
-      <input type="text" @keyup.enter="addDetail" />
-      <div class="selectBox">
-        일정을 선택하세요: {{ selected }}
-        <select v-model="selected">
-          <option>option1</option>
-          <option>option2</option>
-          <option>option3</option>
-        </select>
+        <p>현재일정 : {{ todoStore.todoList[push] }}</p>
+        <div class="selectBox">
+          일정을 선택하세요: {{ selected }}
+          <select v-model="selected" @change="setSelected">
+            <option v-for="(option, index) in detailTodo.typeOption" :key="index">
+              {{ Object.keys(option)[0] }}
+            </option>
+          </select>
+        </div>
+        <input type="text" @keyup.enter="addDetail" placeholder="일정을 자세하게 작성해보세요"/>
       </div>
       <div>
         <ul>
           <li v-for=" (detail, index) in detailTodo.detailList" :key="index">
             {{ detail }}
-        
-            selected:{{ selected }}
           </li>
         </ul>
       </div>
-  
+      {{ detailTodo }}
       <button type="button" @click="$emit('closeModal')">close</button>
-      <button type="button" @click="$emit('closeModal'); $emit('selected',selected)">일정추가 완료</button>
-  
+      <button type="button" @click="$emit('closeModal'); $emit('selected', selected); detailTodo.detailList = []">일정추가 완료</button>
     </div>
   </div>
 </template>
-
 
 <script setup>
 
@@ -44,11 +36,23 @@ import { useTodoStore } from '../store/todo';
 const selected = ref('option1');
 const detailTodo = useDetailStore();
 const todoStore = useTodoStore();
+
 const addDetail = event => {
   detailTodo.detailList.push(event.target.value);
-  detailTodo.todoOption.push(selected)
+ 
+  if (selected.value == 'option1') {
+    detailTodo.boards.push(event.target.value);
+  } else if (selected.value == 'option2') {
+    detailTodo.boardSelect.push(event.target.value);
+  }
+  event.target.value = '';
 }
 
+
+
+const setSelected = event => {
+  detailTodo.setSelected(event.target.value);
+};
 
 const props = defineProps({
   modal: Boolean,
@@ -72,14 +76,19 @@ const props = defineProps({
     left: 50%;
     top: 50%;
     transform: translate3d(-50%, -50%, 0);
-    width: 400px;
-    height: 300px;
+    width: 500px;
+    height: 600px;
     background-color: #fff;
 
     .title {
       text-align: center;
       font-size: 20px;
     }
+  }
+}
+.addList{
+  input{
+    width: 80%;
   }
 }
 </style>

@@ -3,17 +3,22 @@ import { defineStore } from "pinia";
 export const useDetailStore = defineStore('detailStore', {
   state: () => ({
     detailList: [],
-    todoOption: ''
+    boards: [],
+    boardSelect: [],
+    todoOption: [
+      { option1: '' },
+      { option2: '' }
+    ],
+    selectedBoard: 0,
+
   }),
   getters: {
-    typeOption: state => state.todoOption
+    typeOption: state => state.todoOption,
   },
   actions: {
-    addList() {
-      
-    }
+    setSelected(selected) {
+      this.selectedBoard = selected;
+    },
   }
-
-
 })
 
