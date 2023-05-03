@@ -10,12 +10,16 @@ export const useTodoStore = defineStore('todoStore', {
 
   },
   actions: {
-    addTodo() {
-      this.todoStore.push(item)
-      
+    addTodo(item) {
+      const newItem = {
+        text: item.text,
+        time: this.todoTime
+      };
+      this.todoList.push(newItem);
     },
     setTodoTime(time) {
       this.todoTime = time;
-    }
+    },
+    
   }
 })

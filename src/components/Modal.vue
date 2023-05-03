@@ -2,28 +2,28 @@
   <div class="modal" v-if="modal == true">
     <div class="modalContainer">
       <div class="addList">
-        <button type="button" @click="$emit('closeModal')" class="closeButton">X</button>
-        <p class="title">현재일정 :<span>{{ todoStore.todoList[push] }}</span></p>
+        <button type="button" @click.stop="$emit('closeModal')" class="closeButton">X</button>
+        <p class="title">현재일정 :<span>{{ todoStore.todoList[push].text }}</span></p>
         <div class="selectBox">
-          일정을 자세히 나눠보세요: {{  selected}}
+          일정을 자세히 나눠보세요: {{ selected }}
           <select v-model="selected" @change="setSelected">
             <option v-for="(option, index) in detailTodo.typeOption" :key="index">
               {{ Object.keys(option)[0] }}
             </option>
           </select>
         </div>
-        <input type="text" @keyup.enter="addDetail" placeholder="일정을 자세하게 작성해보세요" />
+        <input type="text" @keyup.enter.prevent="addDetail" placeholder="일정을 자세하게 작성해보세요" />
       </div>
       <div>
         <ul>
           <li v-for=" (detail, index) in detailTodo.detailList" :key="index">
-            {{ detail }}
+            {{ detail.text }} {{ detail.status }}
           </li>
         </ul>
       </div>
-      <button type="button" @click="$emit('closeModal'); $emit('selected', selected); detailTodo.detailList = []" class="addButton">일정추가 완료</button>
+      <button type="button" @click.stop="$emit('closeModal'); $emit('selected', selected); detailTodo.detailList = []"
+        class="addButton">일정추가 완료</button>
     </div>
-   
   </div>
 </template>
 
@@ -38,16 +38,20 @@ const detailTodo = useDetailStore();
 const todoStore = useTodoStore();
 
 const addDetail = event => {
+  const detailItem = {
+    text: event.target.value,
+    status: selected.value
+  };
 
-  detailTodo.detailList.push(event.target.value);
+  detailTodo.detailList.push(detailItem);
 
   if (selected.value == 'doing') {
-    detailTodo.boards.push(event.target.value);
+    detailTodo.boards.push(detailItem);
   } else if (selected.value == 'done') {
-    detailTodo.boardSelect.push(event.target.value);
+    detailTodo.boardSelect.push(detailItem);
   }
   event.target.value = '';
-}
+};
 
 const setSelected = event => {
   detailTodo.setSelected(event.target.value);
@@ -83,7 +87,8 @@ const props = defineProps({
     .title {
       text-align: center;
       font-size: 20px;
-      span{
+
+      span {
         border-bottom: 3px solid rgb(21, 209, 115);
       }
     }

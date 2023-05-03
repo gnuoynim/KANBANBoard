@@ -16,7 +16,7 @@
       </div>
     </div>
   </div>
-  {{ todoStore.todoTime }}
+ 
 </template>
 
 <script setup>
@@ -31,7 +31,7 @@ let end = ref('');
 let total = ref('');
 
 
-const calculate = (event) => {
+const calculate = () => {
   const startTime = moment(start.value, 'HH:mm');
   const endTime = moment(end.value, 'HH:mm');
   const duration = moment.duration(endTime.diff(startTime));
