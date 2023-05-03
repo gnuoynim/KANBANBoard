@@ -4,8 +4,8 @@
   </div>
   <div class="todo">
     <div class="todoList">
-      <h2>TodoList (오늘 해야할일 목록)</h2>
-      <p>일정갯수{{ todoStore.todoList.length }}</p>
+      <h2>TodoList (오늘 해야할일 목록) <p>일정갯수{{ todoStore.todoList.length }}</p></h2>
+      <p>오늘 해야할 일과 예상시간을 함께 작성해보세요</p>
       <div class="inputBox">
         todo : <input type="text" placeholder="오늘 할일은 무엇입니까?" @keyup.enter="addTodo" />
         <Time />
@@ -13,11 +13,10 @@
       <ul>
         <li v-for="(list, index) in   todoStore.todoList   " :key="list">
           <input type="checkBox" /><span>{{ list }}</span> 
-          <button type="button" @click="push = index; modal = true">자세한 일정추가{{ modal }}</button>
-          <button type="button">일정삭제</button>
+          <button type="button" @click="push = index; modal = true">자세한 일정추가</button>
+          <button type="button" @click="deleteTodo(index)">일정삭제</button>
         </li>
       </ul>
-      todoStore: {{ todoStore }} {{ detailTodo }}
       <Modal :modal=" modal " :push=" push " :todoStore=" todoStore " @closeModal=" modal = false, selected " />
     </div>
     <div class="items">
@@ -70,7 +69,9 @@ const addTodo = event => {
   }
   event.target.value = '';
 };
-
+const deleteTodo = index => {
+  todoStore.todoList.splice(index, 1);
+}
 </script>
 
 <style lang="scss" scoped>
@@ -108,7 +109,9 @@ const addTodo = event => {
     }
   }
 }
-
+button{
+  cursor: pointer;
+}
 .items {
   background-color: #0083ff;
 
@@ -120,6 +123,8 @@ const addTodo = event => {
   li {
     list-style: none;
     background-color: #fff;
+    margin-bottom: 10px;
+    padding: 10px;
   }
 }
 
@@ -134,16 +139,18 @@ const addTodo = event => {
   li {
     list-style: none;
     background-color: #fff;
+    margin-bottom: 10px;
+    padding: 10px;
 
   }
 }
 
 .inputBox {
   padding: 20px;
-  background-color: #e4e0f5;
+  background-color: #ff7b7b;
   display: flex;
   align-items: center;
-
+  justify-content: space-evenly;
   input {
     height: 100%;
   }

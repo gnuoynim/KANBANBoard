@@ -3,9 +3,9 @@
     <div class="modalContainer">
       <div class="addList">
         <button type="button" @click="$emit('closeModal')" class="closeButton">X</button>
-        <p class="title">현재일정 : {{ todoStore.todoList[push] }}</p>
+        <p class="title">현재일정 :<span>{{ todoStore.todoList[push] }}</span></p>
         <div class="selectBox">
-          일정을 선택하세요: {{ selected }}
+          일정을 자세히 나눠보세요: {{  selected}}
           <select v-model="selected" @change="setSelected">
             <option v-for="(option, index) in detailTodo.typeOption" :key="index">
               {{ Object.keys(option)[0] }}
@@ -82,7 +82,9 @@ const props = defineProps({
     .title {
       text-align: center;
       font-size: 20px;
-
+      span{
+        border-bottom: 3px solid rgb(21, 209, 115);
+      }
     }
   }
 }

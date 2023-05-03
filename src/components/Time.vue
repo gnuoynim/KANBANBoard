@@ -16,7 +16,7 @@
       </div>
     </div>
   </div>
-  {{ time }}
+  {{ todoStore.todoTime }}
 </template>
 
 <script setup>
@@ -38,6 +38,7 @@ const calculate = (event) => {
   const hours = duration.hours();
   const minutes = duration.minutes();
   total.value = `${hours}시간 ${minutes}분`;
+  console.log(total.value)
 
 }
 
@@ -52,6 +53,6 @@ const calculate = (event) => {
   background-color: #fff;
   padding: 10px;
   border-radius: 10px;
-  border: 2px solid #5400ff;
+  border: 2px solid #ff0000;
 }
 </style>
