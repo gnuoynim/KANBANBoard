@@ -12,7 +12,7 @@
       </div>
       <ul>
         <li v-for="(list, index) in   todoStore.todoList   " :key="list">
-          <input type="checkBox" /><span>{{ list }}</span> 
+          <input type="checkBox" /><span>작성구간 :{{ list }}</span> 
           <button type="button" @click="push = index; modal = true">자세한 일정추가</button>
           <button type="button" @click="deleteTodo(index)">일정삭제</button>
         </li>
@@ -53,7 +53,6 @@ const detailTodo = useDetailStore();
 
 const addTodo = event => {
   todoStore.todoList.push(event.target.value);
-
   event.target.value = '';
 };
 const deleteTodo = index => {
@@ -86,7 +85,7 @@ const deleteTodo = index => {
         padding: 20px;
         margin: 30px;
         &:hover{
-          background-color: #e9c7f7;
+          background-color: #abdafff3;
         }
         input[type="checkbox"]:checked + span{
           background-color: #0083ff;

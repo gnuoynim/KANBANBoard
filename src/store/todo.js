@@ -4,7 +4,7 @@ export const useTodoStore = defineStore('todoStore', {
   state: () => ({
     todoList: [],
     todoOption: '',
-    todoTime :['']
+    todoTime :''
   }),
   getters: {
 
@@ -14,6 +14,8 @@ export const useTodoStore = defineStore('todoStore', {
       this.todoStore.push(item)
       
     },
-   
+    setTodoTime(time) {
+      this.todoTime = time;
+    }
   }
 })

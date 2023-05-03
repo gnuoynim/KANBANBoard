@@ -29,7 +29,7 @@ const todoStore = useTodoStore();
 let start = ref('');
 let end = ref('');
 let total = ref('');
-let time = ref(0)
+
 
 const calculate = (event) => {
   const startTime = moment(start.value, 'HH:mm');
@@ -39,7 +39,7 @@ const calculate = (event) => {
   const minutes = duration.minutes();
   total.value = `${hours}시간 ${minutes}분`;
   console.log(total.value)
-
+  todoStore.setTodoTime(total.value);
 }
 
 
