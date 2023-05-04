@@ -4,6 +4,7 @@
       <div class="addList">
         <button type="button" @click.stop="$emit('closeModal')" class="closeButton">X</button>
         <p class="title">현재일정 :<span>{{ todoStore.todoList[push].text }}</span></p>
+        <input v-bind:value="inputText" v-on:input="updateInput">
         <div class="selectBox">
           일정을 자세히 나눠보세요: {{ selected }}
           <select v-model="selected" @change="setSelected">
@@ -36,7 +37,12 @@ import { useTodoStore } from '../store/todo';
 const selected = ref('doing');
 const detailTodo = useDetailStore();
 const todoStore = useTodoStore();
+const inputText = ref('')
 
+const updateInput = () =>{
+  const updateText = event.target.value;
+  inputText = updateText
+}
 const addDetail = event => {
   const detailItem = {
     text: event.target.value,
