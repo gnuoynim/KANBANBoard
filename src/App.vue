@@ -86,9 +86,9 @@ const totalTime = computed(() => {
   let totalMinutes = 0;
 
   todoStore.todoList.forEach((item) => {
-    const timeComponents = item.time.split('시간') || undefined;
+    const timeComponents = item.time.split('시간')
     const hours = parseInt(timeComponents[0]);
-    const minutes = parseInt(timeComponents[1].split('분')[0] || undefined);
+    const minutes = parseInt(timeComponents[1].split('분')[0]);
     totalHours += hours;
     totalMinutes += minutes;
   });
