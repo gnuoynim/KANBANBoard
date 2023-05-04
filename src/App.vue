@@ -14,6 +14,7 @@
         todo : <input ref="todoInput" type="text" placeholder="오늘 할일은 무엇입니까?" />
         <Time />
         <button type="submit" @click="() => addTodo(todoInput)">저장</button>
+        <button type="button">수정</button>
       </div>
       <ul>
         <li v-for="(list, index) in  todoStore.todoList  " :key="list">
