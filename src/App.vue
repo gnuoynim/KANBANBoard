@@ -15,7 +15,6 @@
         <Time />
         <button type="submit" @click="() => addTodo(todoInput)">저장</button>
       </div>
-
       <ul>
         <li v-for="(list, index) in  todoStore.todoList  " :key="list">
           <input type="checkBox" />
@@ -33,7 +32,9 @@
       <ul>
         <li v-for="(  item, i  ) in  detailTodo.boards  " :key=" i ">
           <input type="checkbox">{{ item.text }}
-          <button @click=" moveItem(item, 'boards', 'boardSelect') ">완료</button>
+          <button @click=" moveItem(item,
+          
+          'boards', 'boardSelect') ">완료</button>
         </li>
       </ul>
     </div>
@@ -50,7 +51,7 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref} from 'vue'
 import { useTodoStore } from './store/todo.js'
 import Modal from './components/Modal.vue'
 import { useDetailStore } from './store/detailTodo.js'
