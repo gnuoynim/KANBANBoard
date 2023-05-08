@@ -7,21 +7,21 @@
         <div class="selectBox">
           일정을 자세히 나눠보세요: {{ selected }}
           <select v-model="selected" @change="setSelected">
-            <option v-for="(option, index) in detailTodo.typeOption" :key="index">
+            <option v-for="(option, index) in todoStore.typeOption" :key="index">
               {{ Object.keys(option)[0] }}
             </option>
           </select>
         </div>
-        <input type="text" @keyup.enter.prevent="addDetail" placeholder="일정을 자세하게 작성해보세요" />
+        <input type="text" ref="detailInput" @keyup.enter.stop.prevent="addDetail" placeholder="일정을 자세하게 작성해보세요" />
       </div>
       <div>
         <ul>
-          <li v-for=" (detail, index) in detailTodo.detailList" :key="index">
-            {{ detail.text }} {{ detail.status }}
+          <li v-for=" (detail, index) in todoStore.detailList" :key="index">
+            <input type="checkbox"/>{{ detail.detail }} {{ detail.id }}
           </li>
         </ul>
       </div>
-      <button type="button" @click.stop="$emit('closeModal'); $emit('selected', selected); detailTodo.detailList = []"
+      <button type="button" @click.stop="$emit('closeModal'); $emit('selected', selected); todoStore.detailList = []"
         class="addButton">일정추가 완료</button>
     </div>
   </div>
@@ -30,32 +30,24 @@
 <script setup>
 
 import { ref } from 'vue'
-import { useDetailStore } from '../store/detailTodo.js'
 import { useTodoStore } from '../store/todo';
 
 const selected = ref('doing');
-const detailTodo = useDetailStore();
 const todoStore = useTodoStore();
+const detailInput = ref(null)
 
-
-const addDetail = event => {
-  const detailItem = {
-    text: event.target.value,
-    status: selected.value
-  };
-
-  detailTodo.detailList.push(detailItem);
-
-  if (selected.value == 'doing') {
-    detailTodo.boards.push(detailItem);
-  } else if (selected.value == 'done') {
-    detailTodo.boardSelect.push(detailItem);
+const addDetail = (event) => {
+  event.stopPropagation();
+  const detailText = {
+    id: props.push,
+    detail: event.target.value,
   }
-  event.target.value = '';
+  todoStore.addTodoDetail(detailText);
+  event.target.value =''
 };
 
 const setSelected = event => {
-  detailTodo.setSelected(event.target.value);
+  todoStore.setSelected(event.target.value);
 };
 
 const props = defineProps({
@@ -123,4 +115,5 @@ const props = defineProps({
   input {
     width: 80%;
   }
-}</style>
+}
+</style>

@@ -11,58 +11,40 @@
       </h2>
       <p>오늘 해야할 일과 예상시간을 함께 작성해보세요</p>
       <div class="inputBox">
-        todo : <input ref="todoInput" type="text" placeholder="오늘 할일은 무엇입니까?" />
+        todoList : <input ref="todoInput" type="text" placeholder="오늘 할일은 무엇입니까?" />
         <Time />
         <button type="submit" @click="() => addTodo(todoInput)">저장</button>
-        <button type="button">수정</button>
       </div>
+      <Modal :modal="modal" :push="push" :todoStore="todoStore" @closeModal="modal = false, selected" />
       <ul>
-        <li v-for="(list, index) in  todoStore.todoList  " :key="list">
+        <li v-for="(list, index) in  todoStore.todoList " :key="list">
           <input type="checkBox" />
-          <span>일정추가:{{ list.text }} ,</span><span>예상 시간 : {{ list.time }}</span>
+          <span>일정추가:{{ list }} ,</span><span>예상 시간 : {{ list.time }}</span>
           <div>
             <button type="button" @click="push = index; modal = true">자세한 일정추가</button>
             <button type="button" @click=" deleteTodo(index) ">일정삭제</button>
           </div>
         </li>
       </ul>
-      <Modal :modal=" modal " :push=" push " :todoStore=" todoStore " @closeModal=" modal = false, selected " />
+      {{ todoStore.todoList }}
     </div>
-    <div class="items">
-      <h2>해야할일중 남은일 : 갯수{{ detailTodo.boards.length }}</h2>
-      <ul>
-        <li v-for="(  item, i  ) in  detailTodo.boards  " :key=" i ">
-          <input type="checkbox">{{ item.text }}
-          <button @click=" moveItem(item,
-          
-          'boards', 'boardSelect') ">완료</button>
-        </li>
-      </ul>
-    </div>
-    <div class="itemsYellow">
-      <h2>해야할일중 끝낸일 : 갯수{{ detailTodo.boardSelect.length }}</h2>
-      <ul>
-        <li v-for="(  item, i  ) in   detailTodo.boardSelect  ">
-          <input type="checkbox">{{ item.text }}
-          <button @click=" moveItem(item, 'boardSelect', 'boards') ">미완료</button>
-        </li>
-      </ul>
-    </div>
+
+    <DoingItem :todoStore=" todoStore " class="items" />
+    <DoneItem :todoStore=" todoStore " class="itemsYellow" />
   </div>
 </template>
 
 <script setup>
-import { ref} from 'vue'
+import { ref, computed } from 'vue'
 import { useTodoStore } from './store/todo.js'
 import Modal from './components/Modal.vue'
-import { useDetailStore } from './store/detailTodo.js'
 import Time from './components/Time.vue'
-import { computed } from 'vue';
+import DoingItem from './components/DoingItem.vue'
+import DoneItem from './components/DoneItem.vue'
 
 const todoStore = useTodoStore();
-const modal = ref(false); 
+const modal = ref(false);
 const push = ref(0); // 클릭한값
-const detailTodo = useDetailStore();
 const todoInput = ref(null);
 
 const addTodo = (inputElement) => {
@@ -72,7 +54,8 @@ const addTodo = (inputElement) => {
   }
   const newItem = {
     text: inputElement.value,
-    time: todoStore.todoTime
+    time: todoStore.todoTime,
+    id: push.value,
   };
   todoStore.addTodo(newItem);
   inputElement.value = '';
@@ -82,11 +65,9 @@ const deleteTodo = index => {
   todoStore.todoList.splice(index, 1);
 }
 
-
 const totalTime = computed(() => {
   let totalHours = 0;
   let totalMinutes = 0;
-
   todoStore.todoList.forEach((item) => {
     if (item.time) {
       const timeComponents = item.time.split('시간');
@@ -96,17 +77,16 @@ const totalTime = computed(() => {
       totalMinutes += minutes;
     }
   });
-
   totalHours += Math.floor(totalMinutes / 60);
   totalMinutes %= 60;
   return `${totalHours}시간 ${totalMinutes}분`;
 });
 
 const moveItem = (item, fromList, toList) => {
-  const fromIndex = detailTodo[fromList].indexOf(item);
+  const fromIndex = todoStore[fromList].indexOf(item);
   if (fromIndex > -1) {
-    detailTodo[fromList].splice(fromIndex, 1);
-    detailTodo[toList].push(item);
+    todoStore[fromList].splice(fromIndex, 1);
+    todoStore[toList].push(item);
   }
 };
 

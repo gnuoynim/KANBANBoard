@@ -2,18 +2,19 @@
   <div>
     <h2>Doing Item</h2>
     <div class="items">
-      <h2>해야할일중 남은일 : 갯수{{ detailTodo.boards.length }}</h2>
+      <h2>해야할일중 남은일 : 갯수{{  }}</h2>
       <ul>
-        <li v-for="(  item, i  ) in  detailTodo.boards  " :key="i">
-          <input type="checkbox">{{ item.text }}
-          <button @click="moveItem(item, 'boards', 'boardSelect')">완료</button>
-        </li>
+        <!-- <li v-for="todoStore in todoStore" :key="todoStore">{{ todoStore }}</li> -->
       </ul>
     </div>
   </div>
 </template>
 
 <script setup>
+
+const props = defineProps({
+  todoStore: Object
+})
 
 </script>
 
