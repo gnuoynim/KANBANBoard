@@ -38,10 +38,8 @@ const calculate = () => {
   const hours = duration.hours();
   const minutes = duration.minutes();
   total.value = `${hours}시간 ${minutes}분`;
-  console.log(total.value)
   todoStore.setTodoTime(total.value);
 }
-
 
 </script>
 

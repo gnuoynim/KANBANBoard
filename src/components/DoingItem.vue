@@ -4,7 +4,7 @@
     <div class="items">
       <h2>해야할일중 남은일 : 갯수{{  }}</h2>
       <ul>
-        <!-- <li v-for="todoStore in todoStore" :key="todoStore">{{ todoStore }}</li> -->
+        <li v-for="item in todoStore.doingList" :key="todoStore">{{ item }}</li>
       </ul>
     </div>
   </div>

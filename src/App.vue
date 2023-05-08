@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>KANBAN Borad Today</h1>
+    <h1>KANBAN Board Today</h1>
   </div>
   <div class="todo">
     <div class="todoList">
@@ -15,27 +15,26 @@
         <Time />
         <button type="submit" @click="() => addTodo(todoInput)">저장</button>
       </div>
-      <Modal :modal="modal" :push="push" :todoStore="todoStore" @closeModal="modal = false, selected" />
+      <Modal :modal="modal" :clickValue="clickValue" :todoStore="todoStore" @closeModal="modal = false, selected" />
       <ul>
         <li v-for="(list, index) in  todoStore.todoList " :key="list">
           <input type="checkBox" />
           <span>일정추가:{{ list }} ,</span><span>예상 시간 : {{ list.time }}</span>
           <div>
-            <button type="button" @click="push = index; modal = true">자세한 일정추가</button>
+            <button type="button" @click="clickValue = index; modal = true">자세한 일정추가</button>
             <button type="button" @click=" deleteTodo(index) ">일정삭제</button>
           </div>
         </li>
       </ul>
-      {{ todoStore.todoList }}
+      {{ todoStore.todoList }},{{ todoStore.doingList }},{{ todoStore.doneList }}
     </div>
-
     <DoingItem :todoStore=" todoStore " class="items" />
     <DoneItem :todoStore=" todoStore " class="itemsYellow" />
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watchEffect  } from 'vue'
 import { useTodoStore } from './store/todo.js'
 import Modal from './components/Modal.vue'
 import Time from './components/Time.vue'
@@ -44,7 +43,7 @@ import DoneItem from './components/DoneItem.vue'
 
 const todoStore = useTodoStore();
 const modal = ref(false);
-const push = ref(0); // 클릭한값
+const clickValue = ref(0); // 클릭한값
 const todoInput = ref(null);
 
 const addTodo = (inputElement) => {
@@ -55,7 +54,7 @@ const addTodo = (inputElement) => {
   const newItem = {
     text: inputElement.value,
     time: todoStore.todoTime,
-    id: push.value,
+    clickValue : clickValue.value,
   };
   todoStore.addTodo(newItem);
   inputElement.value = '';
@@ -81,14 +80,6 @@ const totalTime = computed(() => {
   totalMinutes %= 60;
   return `${totalHours}시간 ${totalMinutes}분`;
 });
-
-const moveItem = (item, fromList, toList) => {
-  const fromIndex = todoStore[fromList].indexOf(item);
-  if (fromIndex > -1) {
-    todoStore[fromList].splice(fromIndex, 1);
-    todoStore[toList].push(item);
-  }
-};
 
 </script>
 

@@ -4,13 +4,10 @@ export const useTodoStore = defineStore('todoStore', {
   state: () => ({
     todoList: [],
     todoDetail: [],
-    doingBoard: [],
-    doneBoard: [],
     detailList: [],
-    boardSelect: [],
     doneList: [],
     doingList:[],
-    todoOption: [{ doing: '' }, { done: '' }],
+    todoOption: { doing: '', done: '' },
   }),
   getters: {
     typeOption: (state) => state.todoOption,
@@ -21,24 +18,41 @@ export const useTodoStore = defineStore('todoStore', {
         text: item.text,
         time: this.todoTime,
         id: this.todoList.length,
+        detail :  item.detail
       }
       this.todoList.push(newItem);
-      return newItem.id;
+    },
+
+    addTodoDetail(item) {
+      const newItem = {
+        detail : item.detail
+      }
+      this.detailList.push(newItem)
+      const targetTodoItem = this.todoList.find(todo => todo.id === item.clickValue);
+      if (targetTodoItem) {
+        if (!targetTodoItem.detail) {
+          targetTodoItem.detail = [];
+        }
+        targetTodoItem.detail.push(item.detail);
+      } 
+    },
+    updateTodoOption(selectedValue) {
+      this.todoOption[selectedValue] = selectedValue;
+    },
+    moveTodoItem(selectedValue, clickValue) {
+      const targetIndex = this.todoList.findIndex(todo => todo.id === clickValue);
+      if (targetIndex > -1) {
+        const targetItem = this.todoList[targetIndex];
+        this.todoList.splice(targetIndex, 1);
+        if (selectedValue === 'doing') {
+          this.doingList.push(targetItem);
+        } else if (selectedValue === 'done') {
+          this.doneList.push(targetItem);
+        } 
+      } 
     },
     setTodoTime(time) {
       this.todoTime = time
     },
-    addTodoDetail(item){
-     
-      const newItem = {
-        detail : item.detail,
-        
-      }
-      this.detailList.push(newItem)
-    },
-    setSelected(selected) {
-      this.selectedBoard = selected
-    },
-
   },
 })
