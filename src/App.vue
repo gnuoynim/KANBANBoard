@@ -15,7 +15,7 @@
         <Time />
         <button type="submit" @click="() => addTodo(todoInput)">저장</button>
       </div>
-      <Modal :modal="modal" :clickValue="clickValue" :todoStore="todoStore" @closeModal="modal = false, selected" />
+      <Modal v-if="modal" :modal="modal" :clickValue="clickValue" :todoStore="todoStore" @closeModal="modal = false, selected" />
       <ul>
         <li v-for="(list, index) in  todoStore.todoList " :key="list">
           <input type="checkBox" />
@@ -26,14 +26,15 @@
           </div>
         </li>
       </ul>
-      {{ todoStore.todoList }},{{ todoStore.doingList }},{{ todoStore.doneList }}
+      {{ todoStore.todoList }}, {{ todoStore.doingList }},{{ todoStore.doneList }},{{ todoStore.detailList }}
     </div>
-    <DoingItem :todoStore=" todoStore " class="items" />
-    <DoneItem :todoStore=" todoStore " class="itemsYellow" />
+    <DoingItem :todoStore=" todoStore " class="items" :clickValue="clickValue"/>
+    <DoneItem :todoStore=" todoStore " class="itemsYellow" :clickValue="clickValue" />
   </div>
 </template>
 
 <script setup>
+
 import { ref, computed, watchEffect  } from 'vue'
 import { useTodoStore } from './store/todo.js'
 import Modal from './components/Modal.vue'

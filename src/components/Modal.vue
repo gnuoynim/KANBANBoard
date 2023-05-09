@@ -1,9 +1,11 @@
 <template>
-  <div class="modal" v-if="modal == true">
+  <div class="modal" v-if="modal">
     <div class="modalContainer">
       <div class="addList">
         <button type="button" @click.stop="$emit('closeModal')" class="closeButton">X</button>
-        <p class="title">현재일정 :<span>{{ todoStore.todoList[clickValue]?.text }}</span></p>
+        <p class="title">현재일정 :<span>{{ todoStore.todoList[clickValue]?.text }}
+        {{ todoStore.todoList[clickValue]?.id }}
+        </span></p>
         <div class="selectBox">
           일정을 자세히 나눠보세요: {{ selected }}
           <select v-model="selected" @change="() => updateTodoOption(selected, props.clickValue)">
@@ -15,15 +17,12 @@
         <input type="text" ref="detailInput" @keyup.enter.stop.prevent="addDetail" placeholder="일정을 자세하게 작성해보세요" />
       </div>
       <ul>
-        <li v-for="item in todoStore.detailList" key="item">
+        <li v-for="item in todoStore.detailList[props.clickValue]" key="item">
           <span><input type="checkbox" />{{ item.detail }}</span>
         </li>
-        <li v-for="item in todoStore.doingList">
-          {{ item }}
-        </li>
       </ul>
-      <button type="button" @click.stop="$emit('closeModal'); $emit('selected', selected); todoStore.detailList = []"
-        class="addButton">일정추가 완료</button>
+      <!-- <button type="button" @click.stop="$emit('closeModal'); $emit('selected', selected); todoStore.detailList = []"
+        class="addButton">일정추가 완료</button> -->
     </div>
   </div>
 </template>
@@ -43,7 +42,8 @@ const addDetail = (event) => {
     clickValue: props.clickValue,
     detail: event.target.value,
   }
-  todoStore.addTodoDetail(detailText);
+  todoStore.addTodoDetail(detailText); 
+ 
   updateTodoOption(selected.value, props.clickValue);
 };
 
@@ -63,6 +63,7 @@ const props = defineProps({
 .modal {
   position: fixed;
   top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.685);

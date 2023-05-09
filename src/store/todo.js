@@ -1,9 +1,9 @@
+
 import { defineStore } from 'pinia'
 
 export const useTodoStore = defineStore('todoStore', {
   state: () => ({
     todoList: [],
-    todoDetail: [],
     detailList: [],
     doneList: [],
     doingList:[],
@@ -16,29 +16,35 @@ export const useTodoStore = defineStore('todoStore', {
     addTodo(item) {
       const newItem = {
         text: item.text,
-        time: this.todoTime,
-        id: this.todoList.length,
-        detail :  item.detail
-      }
+        time: item.time,
+        id: Date.now(),
+        detail: [],
+        clickValue: item.clickValue,
+      };
       this.todoList.push(newItem);
     },
-
     addTodoDetail(item) {
       const newItem = {
-        detail : item.detail
+        detail: item.detail
+      };
+    
+      if (!Array.isArray(this.detailList[item.clickValue])) {
+        this.detailList[item.clickValue] = [];
       }
-      this.detailList.push(newItem)
+      this.detailList[item.clickValue].push(newItem);
+    
       const targetTodoItem = this.todoList.find(todo => todo.id === item.clickValue);
       if (targetTodoItem) {
-        if (!targetTodoItem.detail) {
+        if (!Array.isArray(targetTodoItem.detail)) {
           targetTodoItem.detail = [];
         }
         targetTodoItem.detail.push(item.detail);
-      } 
+      }
     },
     updateTodoOption(selectedValue) {
       this.todoOption[selectedValue] = selectedValue;
     },
+   
     moveTodoItem(selectedValue, clickValue) {
       const targetIndex = this.todoList.findIndex(todo => todo.id === clickValue);
       if (targetIndex > -1) {
@@ -48,11 +54,8 @@ export const useTodoStore = defineStore('todoStore', {
           this.doingList.push(targetItem);
         } else if (selectedValue === 'done') {
           this.doneList.push(targetItem);
-        } 
-      } 
-    },
-    setTodoTime(time) {
-      this.todoTime = time
+        }
+      }
     },
   },
-})
+});
