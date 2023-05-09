@@ -1,4 +1,3 @@
-
 import { defineStore } from 'pinia'
 
 export const useTodoStore = defineStore('todoStore', {
@@ -7,11 +6,9 @@ export const useTodoStore = defineStore('todoStore', {
     detailList: [],
     doneList: [],
     doingList:[],
-    todoOption: { doing: '', done: '' },
+   
   }),
-  getters: {
-    typeOption: (state) => state.todoOption,
-  },
+  
   actions: {
     addTodo(item) {
       const newItem = {
@@ -20,6 +17,7 @@ export const useTodoStore = defineStore('todoStore', {
         id: Date.now(),
         detail: [],
         clickValue: item.clickValue,
+        options :  item.selected
       };
       this.todoList.push(newItem);
     },
@@ -41,8 +39,15 @@ export const useTodoStore = defineStore('todoStore', {
         targetTodoItem.detail.push(item.detail);
       }
     },
-    updateTodoOption(selectedValue) {
-      this.todoOption[selectedValue] = selectedValue;
+    updateTodoOption(selectedValue, clickValue) {
+      const targetTodoItem = this.todoList.find(todo => todo.id === clickValue);
+      if (targetTodoItem) {
+        if (selectedValue === 'doing') {
+          targetTodoItem.clickValue = 'doing';
+        } else if (selectedValue === 'done') {
+          targetTodoItem.clickValue = 'done';
+        }
+      }
     },
    
     moveTodoItem(selectedValue, clickValue) {

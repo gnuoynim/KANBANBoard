@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <h1>KANBAN Board Today</h1>
-  </div>
+  
   <div class="todo">
     <div class="todoList">
       <h2>TodoList (오늘 해야할일 목록) <p>일정갯수{{ todoStore.todoList.length }}</p>
@@ -15,37 +13,41 @@
         <Time />
         <button type="submit" @click="() => addTodo(todoInput)">저장</button>
       </div>
-      <Modal v-if="modal" :modal="modal" :clickValue="clickValue" :todoStore="todoStore" @closeModal="modal = false, selected" />
+      <Modal v-if="modal" :modal="modal" :clickValue="clickValue" :todoStore="todoStore" :selected="selected"
+        @closeModal="modal = false,  selected = selectedValue;" />
       <ul>
         <li v-for="(list, index) in  todoStore.todoList " :key="list">
           <input type="checkBox" />
           <span>일정추가:{{ list }} ,</span><span>예상 시간 : {{ list.time }}</span>
           <div>
             <button type="button" @click="clickValue = index; modal = true">자세한 일정추가</button>
-            <button type="button" @click=" deleteTodo(index) ">일정삭제</button>
+            <button type="button" @click=" deleteTodo(index)">일정삭제</button>
           </div>
         </li>
       </ul>
       {{ todoStore.todoList }}, {{ todoStore.doingList }},{{ todoStore.doneList }},{{ todoStore.detailList }}
     </div>
-    <DoingItem :todoStore=" todoStore " class="items" :clickValue="clickValue"/>
-    <DoneItem :todoStore=" todoStore " class="itemsYellow" :clickValue="clickValue" />
+    <DoingItem :todoStore="todoStore" class="items" :clickValue="clickValue" />
+    <DoneItem :todoStore="todoStore" class="itemsYellow" :clickValue="clickValue" />
   </div>
 </template>
 
 <script setup>
 
-import { ref, computed, watchEffect  } from 'vue'
+import { ref, computed, watchEffect } from 'vue'
 import { useTodoStore } from './store/todo.js'
 import Modal from './components/Modal.vue'
 import Time from './components/Time.vue'
 import DoingItem from './components/DoingItem.vue'
 import DoneItem from './components/DoneItem.vue'
 
+
 const todoStore = useTodoStore();
 const modal = ref(false);
 const clickValue = ref(0); // 클릭한값
 const todoInput = ref(null);
+const selected = ref(''); 
+
 
 const addTodo = (inputElement) => {
   if (!inputElement.value.trim()) {
@@ -54,8 +56,9 @@ const addTodo = (inputElement) => {
   }
   const newItem = {
     text: inputElement.value,
-    time: todoStore.todoTime,
-    clickValue : clickValue.value,
+    time: new Date().toISOString(), // ISO 형식의 문자열로 변경
+    id: Date.now().toString(), // 문자열로 변경
+    option: selected.value 
   };
   todoStore.addTodo(newItem);
   inputElement.value = '';
@@ -70,9 +73,9 @@ const totalTime = computed(() => {
   let totalMinutes = 0;
   todoStore.todoList.forEach((item) => {
     if (item.time) {
-      const timeComponents = item.time.split('시간');
+      const timeComponents = item.time.split('T')[1].split(':');
       const hours = parseInt(timeComponents[0]);
-      const minutes = parseInt(timeComponents[1].split('분')[0]);
+      const minutes = parseInt(timeComponents[1]);
       totalHours += hours;
       totalMinutes += minutes;
     }

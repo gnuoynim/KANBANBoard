@@ -2,17 +2,22 @@
   <div class="modal" v-if="modal">
     <div class="modalContainer">
       <div class="addList">
-        <button type="button" @click.stop="$emit('closeModal')" class="closeButton">X</button>
+        <button type="button" @click.stop="$emit('closeModal',selected)" class="closeButton">X</button>
         <p class="title">현재일정 :<span>{{ todoStore.todoList[clickValue]?.text }}
         {{ todoStore.todoList[clickValue]?.id }}
         </span></p>
         <div class="selectBox">
           일정을 자세히 나눠보세요: {{ selected }}
-          <select v-model="selected" @change="() => updateTodoOption(selected, props.clickValue)">
+          <!-- <select v-model="selected" @change="() => updateTodoOption(selected, props.clickValue)">
             <option v-for="(option, index) in Object.keys(todoStore.todoOption)" :key="index">
               {{ option }}
             </option>
+          </select> -->
+          <select v-model="selected">
+            <option>doing</option>
+            <option>done</option>
           </select>
+          {{ selected }}
         </div>
         <input type="text" ref="detailInput" @keyup.enter.stop.prevent="addDetail" placeholder="일정을 자세하게 작성해보세요" />
       </div>
@@ -20,6 +25,7 @@
         <li v-for="item in todoStore.detailList[props.clickValue]" key="item">
           <span><input type="checkbox" />{{ item.detail }}</span>
         </li>
+        <li>{{ todoStore.todoOption }}</li>
       </ul>
       <!-- <button type="button" @click.stop="$emit('closeModal'); $emit('selected', selected); todoStore.detailList = []"
         class="addButton">일정추가 완료</button> -->
@@ -28,19 +34,22 @@
 </template>
 
 <script setup>
-
+import { defineProps } from 'vue'
 import { ref } from 'vue'
 import { useTodoStore } from '../store/todo';
 
-const selected = ref('선택');
+const selected = ref(props.selected);
 const todoStore = useTodoStore();
 const detailInput = ref(null)
 
 const addDetail = (event) => {
+
   event.stopPropagation();
+
   const detailText = {
     clickValue: props.clickValue,
     detail: event.target.value,
+  
   }
   todoStore.addTodoDetail(detailText); 
  
@@ -54,7 +63,8 @@ const updateTodoOption = (selectedValue, clickValue) => {
 const props = defineProps({
   modal: Boolean,
   clickValue: Number,
-  todoStore: Object
+  todoStore: Object,
+  selected: String
 })
 
 </script>
