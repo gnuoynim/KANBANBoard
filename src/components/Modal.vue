@@ -27,8 +27,6 @@
         </li>
         <li>{{ todoStore.todoOption }}</li>
       </ul>
-      <!-- <button type="button" @click.stop="$emit('closeModal'); $emit('selected', selected); todoStore.detailList = []"
-        class="addButton">일정추가 완료</button> -->
     </div>
   </div>
 </template>
