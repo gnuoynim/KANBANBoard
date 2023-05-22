@@ -1,5 +1,4 @@
 <template>
-  
   <div class="todo">
     <div class="todoList">
       <h2>TodoList (오늘 해야할일 목록) <p>일정갯수{{ todoStore.todoList.length }}</p>
@@ -14,7 +13,7 @@
         <button type="submit" @click="() => addTodo(todoInput)">저장</button>
       </div>
       <Modal v-if="modal" :modal="modal" :clickValue="clickValue" :todoStore="todoStore" :selected="selected"
-        @closeModal="modal = false,  selected = selectedValue;" />
+        @closeModal="(selected) => { modal = false; }" />
       <ul>
         <li v-for="(list, index) in  todoStore.todoList " :key="list">
           <input type="checkBox" />
@@ -46,7 +45,7 @@ const todoStore = useTodoStore();
 const modal = ref(false);
 const clickValue = ref(0); // 클릭한값
 const todoInput = ref(null);
-const selected = ref(''); 
+const selected = ref('');
 
 
 const addTodo = (inputElement) => {
@@ -58,8 +57,13 @@ const addTodo = (inputElement) => {
     text: inputElement.value,
     time: new Date().toISOString(), // ISO 형식의 문자열로 변경
     id: Date.now().toString(), // 문자열로 변경
-    option: selected.value 
+    option: selected.value
   };
+
+  if (selected.value) {
+    newItem.option = selected.value;
+  }
+  console.log( selected.value)
   todoStore.addTodo(newItem);
   inputElement.value = '';
 };
@@ -67,7 +71,6 @@ const addTodo = (inputElement) => {
 const deleteTodo = index => {
   todoStore.todoList.splice(index, 1);
 }
-
 const totalTime = computed(() => {
   let totalHours = 0;
   let totalMinutes = 0;

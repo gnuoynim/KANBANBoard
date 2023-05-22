@@ -2,17 +2,12 @@
   <div class="modal" v-if="modal">
     <div class="modalContainer">
       <div class="addList">
-        <button type="button" @click.stop="$emit('closeModal',selected)" class="closeButton">X</button>
+        <button type="button" @click.stop="$emit('closeModal', selected)" class="closeButton">X</button>
         <p class="title">현재일정 :<span>{{ todoStore.todoList[clickValue]?.text }}
-        {{ todoStore.todoList[clickValue]?.id }}
-        </span></p>
+            {{ todoStore.todoList[clickValue]?.id }}
+          </span></p>
         <div class="selectBox">
           일정을 자세히 나눠보세요: {{ selected }}
-          <!-- <select v-model="selected" @change="() => updateTodoOption(selected, props.clickValue)">
-            <option v-for="(option, index) in Object.keys(todoStore.todoOption)" :key="index">
-              {{ option }}
-            </option>
-          </select> -->
           <select v-model="selected">
             <option>doing</option>
             <option>done</option>
@@ -27,20 +22,24 @@
         </li>
         <li>{{ todoStore.todoOption }}</li>
       </ul>
-      <!-- <button type="button" @click.stop="$emit('closeModal'); $emit('selected', selected); todoStore.detailList = []"
-        class="addButton">일정추가 완료</button> -->
     </div>
   </div>
 </template>
 
 <script setup>
 import { defineProps } from 'vue'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useTodoStore } from '../store/todo';
 
 const selected = ref(props.selected);
 const todoStore = useTodoStore();
 const detailInput = ref(null)
+
+
+watch(selected, (newVal) => {
+  console.log('selected 값이 변경되었습니다:', newVal);
+});
+
 
 const addDetail = (event) => {
 
@@ -49,10 +48,10 @@ const addDetail = (event) => {
   const detailText = {
     clickValue: props.clickValue,
     detail: event.target.value,
-  
+
   }
-  todoStore.addTodoDetail(detailText); 
- 
+  todoStore.addTodoDetail(detailText);
+
   updateTodoOption(selected.value, props.clickValue);
 };
 

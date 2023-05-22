@@ -1,6 +1,9 @@
 import { defineStore } from 'pinia'
+import { ref } from 'vue';
 
 export const useTodoStore = defineStore('todoStore', {
+  // let todoList  = ref('a')
+  // return { to}
   state: () => ({
     todoList: [],
     detailList: [],
@@ -17,7 +20,7 @@ export const useTodoStore = defineStore('todoStore', {
         id: Date.now(),
         detail: [],
         clickValue: item.clickValue,
-        options :  item.selected
+        options :item.option
       };
       this.todoList.push(newItem);
     },
@@ -33,10 +36,13 @@ export const useTodoStore = defineStore('todoStore', {
     
       const targetTodoItem = this.todoList.find(todo => todo.id === item.clickValue);
       if (targetTodoItem) {
+        console.log("rr")
         if (!Array.isArray(targetTodoItem.detail)) {
           targetTodoItem.detail = [];
         }
         targetTodoItem.detail.push(item.detail);
+      }else{
+        console.log("ss")
       }
     },
     updateTodoOption(selectedValue, clickValue) {
